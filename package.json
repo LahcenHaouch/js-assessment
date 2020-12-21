@@ -1,5 +1,5 @@
 {
-  "name": "ts-template",
+  "name": "weglot-js-assessment",
   "version": "1.0.0",
   "description": "",
   "main": "main.ts",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LahcenHaouch/node-ts-template.git"
+    "url": "git+https://github.com/LahcenHaouch/weglot-js-assessment.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/LahcenHaouch/node-ts-template/issues"
+    "url": "https://github.com/LahcenHaouch/weglot-js-assessment/issues"
   },
-  "homepage": "https://github.com/LahcenHaouch/node-ts-template#readme",
+  "homepage": "https://github.com/LahcenHaouch/weglot-js-assessment#readme",
   "devDependencies": {
     "@types/jest": "^26.0.19",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
