@@ -6,7 +6,8 @@
   "scripts": {
     "start": "npm run build && node dist/main.js",
     "build": "tsc",
-    "test": "jest --watch",
+    "test": "jest --coverage",
+    "test:local": "jest --watch",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
