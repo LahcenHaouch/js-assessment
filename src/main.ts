@@ -8,27 +8,51 @@ import {
   groupUnavailabilitiesByDay,
 } from './unavailability.ts'
 
-fs.readFile(
-  path.resolve(__dirname, '../data/input1.txt'),
-  'utf8',
-  (err, data) => {
+export const readDirectoryAndPrintIntervalls = (directoryPath: string) => {
+  fs.readdir(path.resolve(__dirname, directoryPath), (err, filenames) => {
     if (err) {
-      console.error(err)
-      return
+      throw err
     }
-    const availabilities: Array<Unavailability> = getSortedUnavailabilities(
-      data
-    )
+    filenames.forEach((filename: string) => {
+      fs.readFile(
+        path.resolve(__dirname, `${directoryPath}/${filename}`),
+        'utf-8',
+        (err, data) => {
+          if (err) {
+            throw err
+          }
+          const availabilities: Array<Unavailability> = getSortedUnavailabilities(
+            data
+          )
 
-    const groupedAvailabilities: Record<
-      string,
-      Array<Unavailability>
-    > = groupUnavailabilitiesByDay(availabilities)
+          const groupedAvailabilities: Record<
+            string,
+            Array<Unavailability>
+          > = groupUnavailabilitiesByDay(availabilities)
 
-    const result = getAvailabilityInterval(groupedAvailabilities)
+          const result = getAvailabilityInterval(groupedAvailabilities)
 
-    if (result) {
-      console.log(result)
-    }
-  }
-)
+          if (result) {
+            fs.writeFile(
+              path.resolve(
+                __dirname,
+                `${directoryPath}/output${filename.substring(
+                  5,
+                  filename.length
+                )}`
+              ),
+              result,
+              err => {
+                if (err) {
+                  throw err
+                }
+              }
+            )
+          }
+        }
+      )
+    })
+  })
+}
+
+readDirectoryAndPrintIntervalls('../data')

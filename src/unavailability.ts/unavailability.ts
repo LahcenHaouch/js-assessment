@@ -52,6 +52,7 @@ export const getAvailabilityInterval = (
     const unvailabilities = record[key]
     for (let i = shiftMin; i + MEETING_DURATION <= shiftMax; i++) {
       const intervalToTest = [i, i + MEETING_DURATION]
+
       const isIntervalAvailable = unvailabilities.every(
         element => !includedInInterval(intervalToTest, element.interval)
       )
