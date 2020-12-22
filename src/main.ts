@@ -8,6 +8,8 @@ import {
   groupUnavailabilitiesByDay,
 } from './unavailability.ts'
 
+const inputRegex = /input[1-9]+.txt/
+
 export const readDirectoryAndPrintIntervalls = async (
   directoryPath: string
 ) => {
@@ -16,6 +18,10 @@ export const readDirectoryAndPrintIntervalls = async (
     'utf-8'
   )
   fileNames.forEach(async (filename: string) => {
+    if (!filename.match(inputRegex)) {
+      return
+    }
+
     const data = await fsPromises.readFile(
       path.resolve(__dirname, `${directoryPath}/${filename}`),
       'utf-8'
@@ -35,10 +41,10 @@ export const readDirectoryAndPrintIntervalls = async (
       await fsPromises.writeFile(
         path.resolve(
           __dirname,
-          `${directoryPath}/output${filename.substring(5, filename.length)}`
+          `${directoryPath}/output${filename.substring(5)}`
         ),
         result,
-        'utf-8'
+        { flag: 'w', encoding: 'utf-8' }
       )
     }
   })
