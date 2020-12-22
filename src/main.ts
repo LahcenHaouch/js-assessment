@@ -1,4 +1,4 @@
-import fs from 'fs'
+import { promises as fsPromises } from 'fs'
 import path from 'path'
 
 import {
@@ -8,50 +8,39 @@ import {
   groupUnavailabilitiesByDay,
 } from './unavailability.ts'
 
-export const readDirectoryAndPrintIntervalls = (directoryPath: string) => {
-  fs.readdir(path.resolve(__dirname, directoryPath), (err, filenames) => {
-    if (err) {
-      throw err
-    }
-    filenames.forEach((filename: string) => {
-      fs.readFile(
-        path.resolve(__dirname, `${directoryPath}/${filename}`),
-        'utf-8',
-        (err, data) => {
-          if (err) {
-            throw err
-          }
-          const availabilities: Array<Unavailability> = getSortedUnavailabilities(
-            data
-          )
+export const readDirectoryAndPrintIntervalls = async (
+  directoryPath: string
+) => {
+  const fileNames = await fsPromises.readdir(
+    path.resolve(__dirname, directoryPath),
+    'utf-8'
+  )
+  fileNames.forEach(async (filename: string) => {
+    const data = await fsPromises.readFile(
+      path.resolve(__dirname, `${directoryPath}/${filename}`),
+      'utf-8'
+    )
+    const availabilities: Array<Unavailability> = getSortedUnavailabilities(
+      data
+    )
 
-          const groupedAvailabilities: Record<
-            string,
-            Array<Unavailability>
-          > = groupUnavailabilitiesByDay(availabilities)
+    const groupedAvailabilities: Record<
+      string,
+      Array<Unavailability>
+    > = groupUnavailabilitiesByDay(availabilities)
 
-          const result = getAvailabilityInterval(groupedAvailabilities)
+    const result = getAvailabilityInterval(groupedAvailabilities)
 
-          if (result) {
-            fs.writeFile(
-              path.resolve(
-                __dirname,
-                `${directoryPath}/output${filename.substring(
-                  5,
-                  filename.length
-                )}`
-              ),
-              result,
-              err => {
-                if (err) {
-                  throw err
-                }
-              }
-            )
-          }
-        }
+    if (result) {
+      await fsPromises.writeFile(
+        path.resolve(
+          __dirname,
+          `${directoryPath}/output${filename.substring(5, filename.length)}`
+        ),
+        result,
+        'utf-8'
       )
-    })
+    }
   })
 }
 
