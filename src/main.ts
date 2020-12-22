@@ -2,15 +2,14 @@ import fs from 'fs'
 import path from 'path'
 
 import {
-  groupByDay,
-  formatInterval,
   Unavailability,
   getAvailabilityInterval,
   getSortedUnavailabilities,
-} from './utils'
+  groupUnavailabilitiesByDay,
+} from './unavailability.ts'
 
 fs.readFile(
-  path.resolve(__dirname, '../data/input5.txt'),
+  path.resolve(__dirname, '../data/input1.txt'),
   'utf8',
   (err, data) => {
     if (err) {
@@ -24,14 +23,12 @@ fs.readFile(
     const groupedAvailabilities: Record<
       string,
       Array<Unavailability>
-    > = groupByDay(availabilities)
+    > = groupUnavailabilitiesByDay(availabilities)
 
-    for (const key in groupedAvailabilities) {
-      const result = getAvailabilityInterval(groupedAvailabilities[key])
-      if (result) {
-        console.log(`${key} ${formatInterval(result)}`)
-        break
-      }
+    const result = getAvailabilityInterval(groupedAvailabilities)
+
+    if (result) {
+      console.log(result)
     }
   }
 )
