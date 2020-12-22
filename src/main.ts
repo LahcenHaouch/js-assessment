@@ -13,6 +13,7 @@ const inputRegex = /input[1-9]+.txt/
 export const readDirectoryAndPrintIntervalls = async (
   directoryPath: string
 ) => {
+  const filesToCreate: Array<Promise<void>> = []
   const fileNames = await fsPromises.readdir(
     path.resolve(__dirname, directoryPath),
     'utf-8'
@@ -38,16 +39,20 @@ export const readDirectoryAndPrintIntervalls = async (
     const result = getAvailabilityInterval(groupedAvailabilities)
 
     if (result) {
-      await fsPromises.writeFile(
-        path.resolve(
-          __dirname,
-          `${directoryPath}/output${filename.substring(5)}`
-        ),
-        result,
-        { flag: 'w', encoding: 'utf-8' }
+      filesToCreate.push(
+        fsPromises.writeFile(
+          path.resolve(
+            __dirname,
+            `${directoryPath}/output${filename.substring(5)}`
+          ),
+          result,
+          { flag: 'w', encoding: 'utf-8' }
+        )
       )
     }
   })
+
+  await Promise.all(filesToCreate)
 }
 
 readDirectoryAndPrintIntervalls('../data')
