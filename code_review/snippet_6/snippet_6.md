@@ -84,17 +84,13 @@ function Employee({ id }) {
     return <Loading />;
   }
 
+  const cells = Object.entries(employee).map((key) => (
+    <Cell key={key}>{employee[key]}</Cell>
+  ));
+
   return (
     <Table>
-      <Row>
-        <Cell>{employee.firstName}</Cell>
-        <Cell>{employee.lastName}</Cell>
-        <Cell>{employee.position}</Cell>
-        <Cell>{employee.project}</Cell>
-        <Cell>{employee.salary}</Cell>
-        <Cell>{employee.yearHired}</Cell>
-        <Cell>{employee.wololo}</Cell>
-      </Row>
+      <Row>{cells}</Row>
     </Table>
   );
 }

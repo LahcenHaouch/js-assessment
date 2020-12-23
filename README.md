@@ -19,7 +19,7 @@ File:
 
 Each entry is in the format:`d hh:mm-hh:mm`.
 
-`d` represents the day of the working week (1 à 5, Monday to Friday).
+`d` represents the day of the working week (1 to 5, Monday to Friday).
 
 `hh:mm-hh:mm` is the interval of time (Start/End included).
 

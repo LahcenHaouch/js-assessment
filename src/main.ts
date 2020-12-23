@@ -6,27 +6,30 @@ import {
   getAvailabilityInterval,
   getSortedUnavailabilities,
   groupUnavailabilitiesByDay,
-} from './unavailability.ts'
+} from './unavailability'
 
 const inputRegex = /input[1-9]+.txt/
 
 export const readDirectoryAndPrintIntervalls = async (
   directoryPath: string
 ) => {
-  const filesToCreate: Array<Promise<void>> = []
   const fileNames = await fsPromises.readdir(
     path.resolve(__dirname, directoryPath),
     'utf-8'
   )
-  fileNames.forEach(async (filename: string) => {
+
+  const filesToCreate: Array<Promise<
+    number | void | undefined
+  >> = fileNames.map(async (filename: string) => {
     if (!filename.match(inputRegex)) {
-      return
+      return undefined
     }
 
     const data = await fsPromises.readFile(
       path.resolve(__dirname, `${directoryPath}/${filename}`),
       'utf-8'
     )
+
     const availabilities: Array<Unavailability> = getSortedUnavailabilities(
       data
     )
@@ -38,18 +41,18 @@ export const readDirectoryAndPrintIntervalls = async (
 
     const result = getAvailabilityInterval(groupedAvailabilities)
 
-    if (result) {
-      filesToCreate.push(
-        fsPromises.writeFile(
-          path.resolve(
-            __dirname,
-            `${directoryPath}/output${filename.substring(5)}`
-          ),
-          result,
-          { flag: 'w', encoding: 'utf-8' }
+    return result
+      ? filesToCreate.push(
+          fsPromises.writeFile(
+            path.resolve(
+              __dirname,
+              `${directoryPath}/output${filename.substring(5)}`
+            ),
+            result,
+            { flag: 'w', encoding: 'utf-8' }
+          )
         )
-      )
-    }
+      : undefined
   })
 
   await Promise.all(filesToCreate)

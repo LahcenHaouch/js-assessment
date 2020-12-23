@@ -13,7 +13,7 @@ function getQueryProvider() {
 
 ## Review
 
-The return of the function is kinda confusign from a caller's perspective
+The return of the function is kinda confusing from a caller's perspective
 It either returns the provider or exits silently
 
 I would change the return a litle bit:
