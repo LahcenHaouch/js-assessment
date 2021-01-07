@@ -1,4 +1,4 @@
-# Weglot JS Assessment
+# JS Assessment
 
 You have to organize meetings that lasts 60 minutes.
 
