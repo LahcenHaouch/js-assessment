@@ -1,4 +1,4 @@
-# JS Assessment
+# Meetings
 
 You have to organize meetings that lasts 60 minutes.
 
